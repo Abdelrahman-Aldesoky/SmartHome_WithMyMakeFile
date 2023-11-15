@@ -62,7 +62,8 @@ I2C_state I2C_SendRepeatedStart(void)
 	TWCR = (1 << TWCR_TWINT) | (1 << TWCR_TWSTA) | (1 << TWCR_TWEN);
 	/* Wait until TWI finish its current job */
 	while (!(TWCR & (1 << TWCR_TWINT)))
-		;
+	{
+	}
 	/*Error Handling*/
 	if ((TWSR & 0b11111000) == REP_START_ACK)
 	{
@@ -85,7 +86,8 @@ I2C_state I2C_SendSlaveAddressWithWrite(u8 Copy_u8Address)
 	TWCR = (1 << TWCR_TWEN) | (1 << TWCR_TWINT) | (1 << TWCR_TWEA);
 	/* Wait until TWI finish its current job */
 	while (!(TWCR & (1 << TWCR_TWINT)))
-		;
+	{
+	}
 	/*Error Handling*/
 	if ((TWSR & 0b11111000) == SLAVE_ADD_AND_WR_ACK)
 	{
@@ -108,7 +110,8 @@ I2C_state I2C_SendSlaveAddressWithRead(u8 Copy_u8Address)
 	TWCR = (1 << TWCR_TWEN) | (1 << TWCR_TWINT) | (1 << TWCR_TWEA);
 	/* Wait until TWI finish its current job */
 	while (!(TWCR & (1 << TWCR_TWINT)))
-		;
+	{
+	}
 	/*Error Handling*/
 	if ((TWSR & 0b11111000) == SLAVE_ADD_AND_RD_ACK)
 	{
@@ -131,7 +134,8 @@ I2C_state I2C_MasterWriteDataByteAck(u8 Copy_u8Data)
 	TWCR = (1 << TWCR_TWEN) | (1 << TWCR_TWINT) | (1 << TWCR_TWEA);
 	/* Wait until TWI finish its current job */
 	while (!(TWCR & (1 << TWCR_TWINT)))
-		;
+	{
+	}
 	/*Error Handling*/
 	if ((TWSR & 0b11111000) == MSTR_WR_BYTE_ACK)
 	{
@@ -154,7 +158,8 @@ I2C_state I2C_MasterWriteDataByteNack(u8 Copy_u8Data)
 	TWCR = (1 << TWCR_TWEN) | (1 << TWCR_TWINT);
 	/* Wait until TWI finish its current job */
 	while (!(TWCR & (1 << TWCR_TWINT)))
-		;
+	{
+	}
 	/*Error Handling*/
 	if ((TWSR & 0b11111000) == MSTR_WR_BYTE_NOT_ACK)
 	{
@@ -176,8 +181,8 @@ I2C_state I2C_MasterReadDataByteAck(u8 *Copy_u8pData)
 	TWCR = (1 << TWCR_TWEN) | (1 << TWCR_TWINT) | (1 << TWCR_TWEA);
 	/* Wait until TWI finish its current job */
 	while (!(TWCR & (1 << TWCR_TWINT)))
-		;
-
+	{
+	}
 	/*Error Handling*/
 	if ((TWSR & 0b11111000) == MSTR_RD_BYTE_WITH_ACK)
 	{
@@ -200,7 +205,8 @@ I2C_state I2C_MasterReadDataByteNack(u8 *Copy_u8pData)
 	TWCR = (1 << TWCR_TWEN) | (1 << TWCR_TWINT);
 	/* Wait until TWI finish its current job */
 	while (!(TWCR & (1 << TWCR_TWINT)))
-		;
+	{
+	}
 	/*Error Handling*/
 	if ((TWSR & 0b11111000) == MSTR_RD_BYTE_WITH_NOT_ACK)
 	{

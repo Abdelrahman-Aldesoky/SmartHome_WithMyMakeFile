@@ -24,7 +24,7 @@
 void SmartHome_voidInit(void)
 {
 	u8 Local_u8SingleUserExist = FALSE;
-	u8 Local_u8CursorPositionZeroingArr[] = { 0, 0 };
+	u8 Local_u8CursorPositionZeroingArr[] = {0, 0};
 	u8 Local_u8CursorPositionZeroingArrLength = sizeof(Local_u8CursorPositionZeroingArr) / sizeof(Local_u8CursorPositionZeroingArr[0]);
 	u8 Local_u8AccountsCountDefaultValue = 0;
 
@@ -38,21 +38,20 @@ void SmartHome_voidInit(void)
 	{
 		EEPROM_voidClear();
 		EEPROM_voidWriteData(ACCOUNTS_COUNT_ADDRESS,
-				Local_u8AccountsCountDefaultValue);
+							 Local_u8AccountsCountDefaultValue);
 
 		EEPROM_voidSeqWrite(CURSOR_POS_ADDRESS,
-				Local_u8CursorPositionZeroingArr,
-				Local_u8CursorPositionZeroingArrLength);
+							Local_u8CursorPositionZeroingArr,
+							Local_u8CursorPositionZeroingArrLength);
 
 		Display(FIRST_BOOT, TWO_SEC, ZERO);
 	}
 	Local_u8SingleUserExist = EEPROM_voidReadData(ACCOUNTS_COUNT_ADDRESS);
-	while(!Local_u8SingleUserExist)
+	while (!Local_u8SingleUserExist)
 	{
 		CreateNewAccount();
 		Local_u8SingleUserExist = EEPROM_voidReadData(ACCOUNTS_COUNT_ADDRESS);
 	}
-
 }
 
 void SmartHome_voidStart(void)
@@ -62,12 +61,12 @@ void SmartHome_voidStart(void)
 
 	u8 Local_u8User_input = 0;
 	Local_u8User_input = USART_voidReceive();
-	Local_u8User_input=tolower(Local_u8User_input);
+	Local_u8User_input = tolower(Local_u8User_input);
 
-	if(Local_u8User_input=='l')
+	if (Local_u8User_input == 'l')
 	{
 		CLEAR_NEWLINE_CHAR;
-		if(Login())
+		if (Login())
 		{
 			/*Unlock door Function*/
 			Door_Unlock();
@@ -88,7 +87,7 @@ void Login_Menu(void)
 {
 	u8 Local_u8PageNo = 0;
 	u8 Local_u8User_input = 0;
-	while(Local_u8User_input != 'e')
+	while (Local_u8User_input != 'e')
 	{
 		Display_Login_Menu(Local_u8PageNo);
 		Local_u8User_input = USART_voidReceive();
@@ -100,13 +99,13 @@ void Login_Menu(void)
 			CLEAR_NEWLINE_CHAR;
 			Door_Lock();
 			/*Lock door function*/
-			Display(DOOR_LOCKED,ONE_SEC,ZERO);
+			Display(DOOR_LOCKED, ONE_SEC, ZERO);
 			break;
 		case 'u':
 			CLEAR_NEWLINE_CHAR;
 			Door_Unlock();
 			/*unlock door function*/
-			Display(DOOR_UNLOCKED,ONE_SEC,ZERO);
+			Display(DOOR_UNLOCKED, ONE_SEC, ZERO);
 			break;
 		case 'o':
 			CLEAR_NEWLINE_CHAR;
@@ -119,14 +118,16 @@ void Login_Menu(void)
 			break;
 		case 'p':
 			CLEAR_NEWLINE_CHAR;
-			if(!ChangePassword()) return;
+			if (!ChangePassword())
+				return;
 			break;
 		case 'd':
 		{
 			CLEAR_NEWLINE_CHAR;
 			DeleteAccount();
 			u8 Local_u8SingleUserExist = EEPROM_voidReadData(ACCOUNTS_COUNT_ADDRESS);
-			if(!Local_u8SingleUserExist) Reset();
+			if (!Local_u8SingleUserExist)
+				Reset();
 			return;
 		}
 		case 'r':
@@ -137,7 +138,8 @@ void Login_Menu(void)
 			CLEAR_NEWLINE_CHAR;
 			/*Next Page in login menu*/
 			Local_u8PageNo++;
-			if(Local_u8PageNo>END_OF_MENU) Local_u8PageNo = ZERO;
+			if (Local_u8PageNo > END_OF_MENU)
+				Local_u8PageNo = ZERO;
 			break;
 		case 'e':
 			CLEAR_NEWLINE_CHAR;
@@ -147,7 +149,6 @@ void Login_Menu(void)
 			break;
 		}
 	}
-
 }
 
 void Display_Login_Menu(u8 Copy_u8PageNo)
@@ -206,8 +207,8 @@ u8 CheckExistingUserNames(u8 Copy_u8UserNameArr[], u8 Copy_u8UserNameLength)
 	u8 Local_u8UserNameExists = FALSE;
 	u8 Local_u8AccountsCount = EEPROM_voidReadData(ACCOUNTS_COUNT_ADDRESS);
 	u8 Local_u8EEpromCurrentUserNameLength = 0;
-	u8 Local_u8EEpromCurrentUserNAME[ARR_LENGTH] = { 0 };
-	u8 Local_u8EEpromCursorPositionArr[] = { 0, 0 };
+	u8 Local_u8EEpromCurrentUserNAME[ARR_LENGTH] = {0};
+	u8 Local_u8EEpromCursorPositionArr[] = {0, 0};
 	u8 Local_u8EEpromCursorPositionLength = sizeof(Local_u8EEpromCursorPositionArr) / sizeof(Local_u8EEpromCursorPositionArr[0]);
 
 	for (u8 Local_Iterator = 0; Local_Iterator < Local_u8AccountsCount; Local_Iterator++)
@@ -218,7 +219,7 @@ u8 CheckExistingUserNames(u8 Copy_u8UserNameArr[], u8 Copy_u8UserNameLength)
 
 		if (Copy_u8UserNameLength == Local_u8EEpromCurrentUserNameLength)
 		{
-			Local_u8UserNameExists = !strcmp((char*) Copy_u8UserNameArr, (char*) Local_u8EEpromCurrentUserNAME);
+			Local_u8UserNameExists = !strcmp((char *)Copy_u8UserNameArr, (char *)Local_u8EEpromCurrentUserNAME);
 			if (Local_u8UserNameExists)
 			{
 				Local_u8UserNameExists = TRUE;
@@ -234,11 +235,11 @@ u8 CheckExistingUserNames(u8 Copy_u8UserNameArr[], u8 Copy_u8UserNameLength)
 
 void CreateNewAccount(void)
 {
-	u8 Local_u8UserNameArr[ARR_LENGTH] = { 0 };
+	u8 Local_u8UserNameArr[ARR_LENGTH] = {0};
 	u8 Local_u8UserNameArrLength = 0;
-	u8 Local_u8PasswordArr[ARR_LENGTH] = { 0 };
+	u8 Local_u8PasswordArr[ARR_LENGTH] = {0};
 	u8 Local_u8PasswordLength = 0;
-	u8 Local_u8ConfirmPasswordArr[ARR_LENGTH] = { 0 };
+	u8 Local_u8ConfirmPasswordArr[ARR_LENGTH] = {0};
 	u8 Local_u8ConfirmPasswordLength = 0;
 
 	u8 Local_u8MaxUsersReached = FALSE;
@@ -256,7 +257,7 @@ void CreateNewAccount(void)
 		return;
 	}
 
-	Local_u8UserNameExists = CheckExistingUserNames(Local_u8UserNameArr,Local_u8UserNameArrLength);
+	Local_u8UserNameExists = CheckExistingUserNames(Local_u8UserNameArr, Local_u8UserNameArrLength);
 	if (Local_u8UserNameExists)
 	{
 		Display(USER_EXISTS, TWO_SEC, ZERO);
@@ -273,7 +274,7 @@ void CreateNewAccount(void)
 
 		if (Local_u8PasswordLength == Local_u8ConfirmPasswordLength)
 		{
-			Local_u8NotaMatch = strcmp((char*) Local_u8PasswordArr, (char*) Local_u8ConfirmPasswordArr);
+			Local_u8NotaMatch = strcmp((char *)Local_u8PasswordArr, (char *)Local_u8ConfirmPasswordArr);
 			if (PASSWORDS_MATCH)
 			{
 				SaveNewAccount(Local_u8UserNameArr, Local_u8UserNameArrLength, Local_u8PasswordArr, Local_u8PasswordLength);
@@ -290,7 +291,7 @@ void CreateNewAccount(void)
 void SaveNewAccount(u8 Copy_u8UserNameArr[], u8 Copy_u8UserNameArrLength, u8 Copy_u8PasswordArr[], u8 Copy_u8PasswordLength)
 {
 	u16 Local_u16EEpromCurosrPosition = 0;
-	u8 Local_u8EEpromCursorPositionArr[] = { 0, 0 };
+	u8 Local_u8EEpromCursorPositionArr[] = {0, 0};
 	u8 Local_u8EEpromCursorPositionLength = sizeof(Local_u8EEpromCursorPositionArr) / sizeof(Local_u8EEpromCursorPositionArr[0]);
 
 	u8 Local_u8AccountsNumber = EEPROM_voidReadData(ACCOUNTS_COUNT_ADDRESS);
@@ -318,9 +319,9 @@ void SaveNewAccount(u8 Copy_u8UserNameArr[], u8 Copy_u8UserNameArrLength, u8 Cop
 
 u8 Login(void)
 {
-	u8 Local_u8UserNameArr[ARR_LENGTH] = { 0 };
+	u8 Local_u8UserNameArr[ARR_LENGTH] = {0};
 	u8 Local_u8UserNameArrLength = 0;
-	u8 Local_u8PasswordArr[ARR_LENGTH] = { 0 };
+	u8 Local_u8PasswordArr[ARR_LENGTH] = {0};
 	u8 Local_u8PasswordLength = 0;
 
 	u8 Local_u8SuccessfulLogin = FALSE;
@@ -337,7 +338,7 @@ u8 Login(void)
 
 		if (Local_u8UserNameExists)
 		{
-			if(Local_u8SuccessfulLogin)
+			if (Local_u8SuccessfulLogin)
 			{
 				Display(SUCCESSFUL_LOGIN, TWO_SEC, ZERO);
 				return Local_u8SuccessfulLogin;
@@ -359,20 +360,18 @@ u8 Login(void)
 
 void DeleteAccount(void)
 {
-	u8 Local_u8MoveArr[FULL_DATA_ARR_LENGTH] = { 0 };
-	u8 Local_u8DeleteArr[FULL_DATA_ARR_LENGTH] = { 0 };
+	u8 Local_u8MoveArr[FULL_DATA_ARR_LENGTH] = {0};
+	u8 Local_u8DeleteArr[FULL_DATA_ARR_LENGTH] = {0};
 
-	u8 Local_u8MoveArrAddress[] = { 0 , 0 };
-	u8 Local_u8MoveArrAddressLength = sizeof(Local_u8MoveArrAddress)/sizeof(Local_u8MoveArrAddress[0]);
+	u8 Local_u8MoveArrAddress[] = {0, 0};
+	u8 Local_u8MoveArrAddressLength = sizeof(Local_u8MoveArrAddress) / sizeof(Local_u8MoveArrAddress[0]);
 	u16 Local_u16MoveAddress = 0;
 
-	u8 Local_u8EEpromCursorPositionArr[] = { 0 , 0 };
+	u8 Local_u8EEpromCursorPositionArr[] = {0, 0};
 	u8 Local_u8EEpromCursorPositionLength = sizeof(Local_u8EEpromCursorPositionArr) / sizeof(Local_u8EEpromCursorPositionArr[0]);
 	u16 Local_u16EEpromCursorPosition = 0;
 
-
 	EEPROM_voidSeqRead(DEFAULT_DELETE_ADDRESS, Local_u8DeleteArr, PAGE_SIZE);
-
 
 	EEPROM_voidSeqRead(CURRENT_USER_PASS_ADDRESS, Local_u8MoveArrAddress, Local_u8MoveArrAddressLength);
 	Local_u16MoveAddress = Combine2u8(Local_u8MoveArrAddress);
@@ -395,7 +394,6 @@ void DeleteAccount(void)
 	EEPROM_voidSeqWrite(Local_u16MoveAddress, Local_u8MoveArr, PAGE_SIZE);
 	EEPROM_voidSeqWrite(Local_u16EEpromCursorPosition, Local_u8DeleteArr, PAGE_SIZE);
 
-
 	Splitu16(Local_u16EEpromCursorPosition, Local_u8EEpromCursorPositionArr);
 	EEPROM_voidSeqWrite(CURSOR_POS_ADDRESS, Local_u8EEpromCursorPositionArr, Local_u8EEpromCursorPositionLength);
 
@@ -408,9 +406,9 @@ s8 CheckPassword(u8 Copy_u8PasswordArr[], u8 Copy_u8PasswordLength)
 {
 	s8 Local_s8CorrectPassword = FALSE;
 	u16 Local_u16PasswordAddress = 0;
-	u8 Local_u8PasswordAddressArr[] = { 0, 0 };
+	u8 Local_u8PasswordAddressArr[] = {0, 0};
 	u8 Local_u8PasswordAddressLength = sizeof(Local_u8PasswordAddressArr) / sizeof(Local_u8PasswordAddressArr[0]);
-	u8 Local_u8CurrentSavedUserPasswordArr[ARR_LENGTH] = { 0 };
+	u8 Local_u8CurrentSavedUserPasswordArr[ARR_LENGTH] = {0};
 	u8 Local_u8CurrentSavedUserPasswordLength = 0;
 
 	EEPROM_voidSeqRead(CURRENT_USER_PASS_ADDRESS, Local_u8PasswordAddressArr, Local_u8PasswordAddressLength);
@@ -420,8 +418,9 @@ s8 CheckPassword(u8 Copy_u8PasswordArr[], u8 Copy_u8PasswordLength)
 	if (Local_u8CurrentSavedUserPasswordLength == Copy_u8PasswordLength)
 	{
 		EEPROM_voidSeqRead(Local_u16PasswordAddress, Local_u8CurrentSavedUserPasswordArr, Local_u8CurrentSavedUserPasswordLength);
-		Local_s8CorrectPassword = !strcmp((char*) Local_u8CurrentSavedUserPasswordArr, (char*) Copy_u8PasswordArr);
-		if (Local_s8CorrectPassword) return Local_s8CorrectPassword;
+		Local_s8CorrectPassword = !strcmp((char *)Local_u8CurrentSavedUserPasswordArr, (char *)Copy_u8PasswordArr);
+		if (Local_s8CorrectPassword)
+			return Local_s8CorrectPassword;
 	}
 	return Local_s8CorrectPassword;
 }
@@ -432,20 +431,20 @@ u8 ChangePassword(void)
 	s8 Local_s8CorrectOldPassword = FALSE;
 	u8 Local_u8NotaMatch = TRUE;
 
-	u8 Local_u8PasswordArr[ARR_LENGTH] = { 0 };
+	u8 Local_u8PasswordArr[ARR_LENGTH] = {0};
 	u8 Local_u8PasswordLength = 0;
-	u8 Local_u8ConfirmPasswordArr[ARR_LENGTH] = { 0 };
+	u8 Local_u8ConfirmPasswordArr[ARR_LENGTH] = {0};
 	u8 Local_u8ConfirmPasswordLength = 0;
 	u8 Local_u8TriesCount = 0;
 
-	u8 Local_u8PasswordAddressArr[] = { 0, 0 };
+	u8 Local_u8PasswordAddressArr[] = {0, 0};
 	u8 Local_u8PasswordAddressLength = sizeof(Local_u8PasswordAddressArr) / sizeof(Local_u8PasswordAddressArr[0]);
-	u16 Local_u16PasswordAddress=0;
+	u16 Local_u16PasswordAddress = 0;
 
 	EEPROM_voidSeqRead(CURRENT_USER_PASS_ADDRESS, Local_u8PasswordAddressArr, Local_u8PasswordAddressLength);
 	Local_u16PasswordAddress = Combine2u8(Local_u8PasswordAddressArr);
 
-	u8 Local_u8DeleteArr[FULL_DATA_ARR_LENGTH] = { 0 };
+	u8 Local_u8DeleteArr[FULL_DATA_ARR_LENGTH] = {0};
 	EEPROM_voidSeqRead(DEFAULT_DELETE_ADDRESS, Local_u8DeleteArr, PAGE_SIZE);
 
 	for (u8 Local_Iterator = 0; Local_Iterator < NUMBER_OF_TRIES; Local_Iterator++)
@@ -465,7 +464,7 @@ u8 ChangePassword(void)
 
 				if (Local_u8PasswordLength == Local_u8ConfirmPasswordLength)
 				{
-					Local_u8NotaMatch = strcmp((char*) Local_u8PasswordArr, (char*) Local_u8ConfirmPasswordArr);
+					Local_u8NotaMatch = strcmp((char *)Local_u8PasswordArr, (char *)Local_u8ConfirmPasswordArr);
 					if (PASSWORDS_MATCH)
 					{
 						EEPROM_voidSeqWrite(Local_u16PasswordAddress, Local_u8DeleteArr, PAGE_SIZE);
@@ -540,7 +539,7 @@ void Display(u8 Copy_u8Selector, u16 Copy_u16Time, u8 Copy_u8TriesCount)
 	case NOT_A_MATCH:
 		CLCD_voidSendString("  Not a Match.  ");
 		CLCD_voidSetPostion(SECOND_LINE, 0);
-		if(NO_MORE_TRIES)
+		if (NO_MORE_TRIES)
 		{
 			CLCD_voidSendString(" NO MORE TRIES! ");
 		}
@@ -558,7 +557,7 @@ void Display(u8 Copy_u8Selector, u16 Copy_u16Time, u8 Copy_u8TriesCount)
 	case WRONG_PASSWORD:
 		CLCD_voidSendString("WRONG PASSWORD!!");
 		CLCD_voidSetPostion(SECOND_LINE, 0);
-		if(NO_MORE_TRIES)
+		if (NO_MORE_TRIES)
 		{
 			CLCD_voidSendString(" NO MORE TRIES! ");
 		}
@@ -573,7 +572,7 @@ void Display(u8 Copy_u8Selector, u16 Copy_u16Time, u8 Copy_u8TriesCount)
 	case USER_DOESNOT_EXIST:
 		CLCD_voidSendString(" USER DOES NOT! ");
 		CLCD_voidSetPostion(SECOND_LINE, 0);
-		if(NO_MORE_TRIES)
+		if (NO_MORE_TRIES)
 		{
 			CLCD_voidSetPostion(FIRST_LINE, 0);
 			CLCD_voidSendString(" NO MORE TRIES! ");
@@ -639,5 +638,5 @@ u16 Combine2u8(u8 arr[])
 void Splitu16(u16 number, u8 arr[])
 {
 	arr[0] = (number >> 8) & 0XFF;
-	arr[1] = (u8) number & 0XFF;
+	arr[1] = (u8)number & 0XFF;
 }

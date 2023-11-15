@@ -11,11 +11,11 @@
 #include "BL_config.h"
 #include "BL_private.h"
 #include "BL_interface.h"
-#include <util/delay.h>
 #include <string.h>
 #include <ctype.h>
+#include <util/delay.h>
 
-void BL_voidReceive(u8 Selector, u8 arr[], u8* arr_length)
+void BL_voidReceive(u8 Selector, u8 arr[], u8 *arr_length)
 {
 	u8 index = 0;
 	u8 input = 0;
@@ -57,5 +57,5 @@ void BL_voidReceive(u8 Selector, u8 arr[], u8* arr_length)
 	USART_voidSend('\r');
 	USART_voidSend('\n');
 
-	strcpy((char*) arr, (char*) user_input);
+	strcpy((char *)arr, (char *)user_input);
 }
